@@ -1,0 +1,1 @@
+create burgers_db
