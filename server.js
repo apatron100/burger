@@ -1,15 +1,22 @@
 var express = require('express');
-var app = express()
 var bodyParser = require('body-parser');
+var methodOverride = require('method-override');
+var exphbs = require("express-handlebars");
 
-app.use(bodyParser.json({ type: 'application/*+json' }))
-app.use(bodyParser.raw({ type: 'application/vnd.custom-type' }))
-app.use(bodyParser.text({ type: 'text/html' }))
+var app = express();
 
-app.get("/", function (req, res) {
-	res.send("hello World")
-})
+app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.urlencoded({
+	extended: false
+}))
+app.use(methodOverride('_method'));	
+app.engine('handlebars',exphbs({
+	defaultLayout: 'main'
+	
+}));
+app.set('view engine','handlebars');
+var routes =require('./controllers/routes.js');
+app.use('/',routes);
+var port = 3000;
+app.listen(port);
 
-app.listen(3000, function(){
-	console.log("listening to port 3000")
-})
